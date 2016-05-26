@@ -9,7 +9,7 @@ __license__ = "GPL_v3"
 
 usage="
 SYNOPSIS:
-split_fasta.jl [-bdDgpq] fasta_file
+split_fasta.jl [-h] [-b] [-D] [-r] [-v] [-d output_dir] [-x pattern] [-y string] fasta_file
 
 DESCRIPTION:
 Split a multi-fasta file into as many files as sequences contained.
@@ -22,21 +22,19 @@ ARGUMENTS:
     fasta_file      input fasta file
 
 OPTIONS:
-    -b              replace blanck by underscore in headers? [true]
+    -b              do not replace blanck by underscore in headers (done by default)
     -d              output directory
     -D              debug mode
-    -h              print this help
-    -r              allow regular expresion for pattern replacing?
-                    Works with option '-x' [false]
+    -h              print this help and exit (irrespectively to other arguments)
+    -r              allow regular expression for pattern replacing? (default is false)
+                    Works with option '-x'
     -v              verbose mode
     -x              pattern to be removed in headers (future file name)
     -y              string to replace '-x' patterns with
 
 EXAMPLE:
-split_fasta.jl -d -r -v './2016-2017_Venturia/Data4Corentin/00_Data/Single_CDS' -p mRNAVein -r B04 './2016-2017_Venturia/Data4Corentin/00_Data/B04/cds'
+split_fasta.jl -r -v './2016-2017_Venturia/Data4Corentin/00_Data/Single_CDS' -p mRNAVein -r B04 './2016-2017_Venturia/Data4Corentin/00_Data/B04/cds'
 "
-
-gooda = r"-[bdDhrvxy]"
 
 # functions
 function get_arg(args, i, fun = x->x)
@@ -51,12 +49,13 @@ end
 i = 1 ; 
 dir = "." ; pat1 = "" ; pat2 = "" ; inp = ""
 sprep = "true" ; debug = "false" ; reg= "false" ; verbose= "false"
+gooda = r"-[bdDhrvxy]"
 while i ≤ length(ARGS)
     a = ARGS[i]
     
     if i != length(ARGS) && !ismatch(gooda, a)
         println("ERROR: Bad argument '$a' in the command line")
-        println("       !!! Beware that concatenation of short options is not allowed (e.g. '-Ddr' is invalid) !!!")
+        println("       !!! Beware that concatenation of options is not allowed (e.g. '-Ddr' is invalid) !!!")
         println(usage)
         exit()
     end
@@ -66,7 +65,7 @@ while i ≤ length(ARGS)
         println(usage)
         exit()
     elseif a == "-b"    # replace blanks by underscore in header?
-        sprep = "true"
+        sprep = "false"
     elseif a == "-d"    # directory where to write the outputs
         dir, i = get_arg(ARGS, i)
         if ismatch(gooda, dir)
