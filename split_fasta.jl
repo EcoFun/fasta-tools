@@ -1,4 +1,4 @@
-#!/usr/bin/julia
+#!/usr/bin/env julia
 
 # dependencies
 # - julia version 0.4.5
