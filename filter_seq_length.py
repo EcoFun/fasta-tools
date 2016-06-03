@@ -5,13 +5,15 @@ __maintainer__ = "Ludovic Duvaux"
 __license__ = "GPL_v3"
 
 from sys import argv, exit
+from os.path import basename
 
 usage="""
 SYNOPSIS:
 '{0}' fasta_file length output_file
 
 DESCRIPTION:
-Filter sequences from a fasta file (e.g. contigs) based on length.
+Remove sequences shorter than 'length' from a fasta file.
+Accept gz files.
 
 ARGUMENTS:
     fasta_file          input fasta file
@@ -30,25 +32,51 @@ inp = argv[1]       # inpout
 leng = int(argv[2]) # length filter
 out = argv[3]       # output
 
+test_gz = inp[-2:]=="gz"
+#~print test_gz
+j = 1
+if test_gz:
+    import gzip
+    if out[-2:]!="gz": out=out+".gz"
+    o = gzip.open(out, "w")
+    print "# Write file %s (compressed)" % out
 
-o = open(out, "w")
-print "# Write file %s" % out
+    i = 0
+    with gzip.open(inp) as f:
+        for l in f:
+            if l[0] != '>':
+                print l
+                print "Sequence on multiple lines!"
+                exit(usage)
+            else:
+                m = next(f)   # record following line (should be sequence line)
+                j += 2
+                lg = len(m)
+                if lg > leng:
+                    o.write(l)
+                    o.write(m)
+                else:
+                    print "skip sequence %s (length=%s)" % (lg, lg)
 
-i = 0
-with open(inp) as f:
-    for l in f:
-        if l[0] != '>':
-            print "Sequence on multiple lines!"
-            exit(usage)
-        else
-            m = next(inp)   # record following line (should be sequence line)
-            lg = len(m)
-            if lg > leng:
-                o.write(l + "\n")
-                o.write(m + "\n")
-            else
-                print "skip sequence %s (length=%s)" % lg
+else:
+    o = open(out, "w")
+    print "# Write file %s (uncompressed)" % out
+    with open(inp) as f:
+        for l in f:
+            if l[0] != '>':
+                print l
+                print "Sequence on multiple lines!"
+                exit(usage)
+            else:
+                m = next(f)   # record following line (should be sequence line)
+                j += 2
+                lg = len(m)
+                if lg > leng:
+                    o.write(l)
+                    o.write(m)
+                else:
+                    print "skip sequence %s (length=%s)" % (lg, lg)
 
-o.write('\n')
+print "File originally included %s sequences" % ((j-1)/2)
 f.close()
 o.close()
