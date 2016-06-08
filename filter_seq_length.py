@@ -9,7 +9,7 @@ from os.path import basename
 
 usage="""
 SYNOPSIS:
-'{0}' fasta_file length output_file
+{0} fasta_file length output_file
 
 DESCRIPTION:
 Remove sequences shorter than 'length' from a fasta file.
