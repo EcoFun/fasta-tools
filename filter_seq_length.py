@@ -28,7 +28,7 @@ if len(argv) != 4:
     print "ERROR: wrong number of arguments (there should be 3)"
     exit(usage)
 
-inp = argv[1]       # inpout
+inp = argv[1]       # input
 leng = int(argv[2]) # length filter
 out = argv[3]       # output
 
