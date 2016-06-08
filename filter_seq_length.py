@@ -56,7 +56,7 @@ if test_gz:
                     o.write(l)
                     o.write(m)
                 else:
-                    print "skip sequence %s (length=%s)" % (lg, lg)
+                    print "skip sequence %s (length=%s)" % (l, lg)
 
 else:
     o = open(out, "w")
@@ -75,7 +75,7 @@ else:
                     o.write(l)
                     o.write(m)
                 else:
-                    print "skip sequence %s (length=%s)" % (lg, lg)
+                    print "skip sequence %s (length=%s)" % (l, lg)
 
 print "File originally included %s sequences" % ((j-1)/2)
 f.close()
