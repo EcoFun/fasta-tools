@@ -4,7 +4,7 @@ my $usage="\nUsage: $0 [-hrg] [fastaFileName1 ...]\n".
     "  -h: help\n".
     "  -r: reverse\n" .
     "  -g: remove gaps '-' from the sequence\n".
-    "Sort FASTA sequences alphabetically by names.  If multiple files are \n".
+    "Sort FASTA sequences alphabetically by names. If multiple files are \n".
     "given, sequences in all files are marged before sorting.  If no \n".
     "argument is given, it will take STDIN as the input.\n" .
     "Note that the entire sequence label including spaces is used as\n".
