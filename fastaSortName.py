@@ -1,6 +1,4 @@
 #!/bin/env python2
-# usage:
-    # ./compare_cleaning_methods.py raw_outliers_files columns_header sample_file
 
 __author__ = "Ludovic Duvaux"
 __maintainer__ = "Ludovic Duvaux"
@@ -11,17 +9,18 @@ v=0
 
 # 0.1) get options from commands lines
 parser = argparse.ArgumentParser(description='Sort alphabetically sequences from a fasta file')
-parser.add_argument('fasta_file', help='Files of the raw lists of outliers', nargs=1)
-parser.add_argument('-f', help='Name of a sequence to be displayed first', nargs=1)
+parser.add_argument('-f', '--first', help='Name of a sequence to be displayed first', nargs=1)
+parser.add_argument('fasta_file', help='multi fasta file', nargs=1)
+
 
 # 0.2) set options
 args = parser.parse_args()
 #~print args
 
-s = args.fasta_file
-#~print s
-fsam = s[0]
-#~print fsam
+fsam = args.fasta_file[0]
+first = args.first[0]
+#~print first, fsam
+#~sys.exit()
 
 # 1) set initial dictionary
 res = {}
@@ -29,7 +28,7 @@ with open(fsam) as sam:
     for l in sam:
         #~print l
         if l[0] ==">":
-            key = l.strip("> ").strip()
+            key = l.strip(">").strip()
             res[key] = [l.strip()]
         else:
             res[key].append(l.strip())
@@ -37,8 +36,7 @@ with open(fsam) as sam:
 
 # print final ali
     # print first sequence
-if args.f != None:
-    first = args.f[0]
+if first != None:
     keys = res.keys()
     m = [s for s in keys if first in s ]
     if len(m) == 0:
